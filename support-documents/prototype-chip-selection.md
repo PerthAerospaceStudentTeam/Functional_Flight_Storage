@@ -5,6 +5,7 @@ There are many chips that can be used for storage. All are to be automotive grad
 ## NAND Flash
 
 On paper, the most desirable form of memory. It is non-volatile, high capacity, and cheaper. The downsides are the limited amount of write cycles - this could prove fatal in a mission critical environment
+https://au.mouser.com/ProductDetail/Winbond/W25N01GVSFIG?qs=qSfuJ%2Bfl%2Fd5wRcUOkRc5Cw%3D%3D
 
 ## NOR Flash
 
