@@ -10,13 +10,13 @@ On paper, the most desirable form of memory. It is non-volatile, high capacity, 
 
 - SPI, 25mA
 
-### Reasons for selection
+#### Reasons for selection
 
 - Used by Binar
 - Low cost to storage space
 - Easy to interface with
 
-### Reasons for not using
+#### Reasons for not using
 
 - (Relatively) High current consumption
 
@@ -24,11 +24,11 @@ On paper, the most desirable form of memory. It is non-volatile, high capacity, 
 
 - Parallel, 35mA, typ 25mA
 
-### Reasons for selection
+#### Reasons for selection
 
 - Automotive grade
 
-### Reasons for not using
+#### Reasons for not using
 
 - Needs a LOT of GPIO pins
 - Expensive
@@ -41,11 +41,11 @@ Similar to NOR flash but with much higher read/write speeds. Costs more
 
 - SPI, 3mA, typ 1.6mA
 
-### Reasons for selection
+#### Reasons for selection
 
 - VERY low current consumption
 - Very high read/write rates
 
-### Reasons for not using
+#### Reasons for not using
 
 - Not high storage capacity (may be good as a bootloader for firmware?)
