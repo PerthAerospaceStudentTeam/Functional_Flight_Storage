@@ -1,6 +1,6 @@
 # Hardware
 
-To use the chip in a hardware setting, simply take the Altium files found in [`/pcb/altium`](https://github.com/PerthAerospaceStudentTeam/past-storage/blob/main/pcb/altium), and place them in the desired project.
+To use the chip in a hardware setting, simply take the Altium files found in [`/pcb/altium`](https://github.com/PerthAerospaceStudentTeam/past-storage/blob/main/pcb/altium/README.md), and place them in the desired project.
 
 The pinouts are as follows
 
