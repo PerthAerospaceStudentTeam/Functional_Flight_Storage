@@ -7,4 +7,4 @@ Secondary Storage for PAST Cubesat
   - `gerbers` contain the ready to use schematics
   - `altium` contains the source altium files
  - `usage` contains the information on how to use and interface with the storage chips
-  - `gridfinity-mount` contains the information on how to mount the storage chips to the gridfinity specs [found here](https://github.com/PerthAerospaceStudentTeam/Modular_FlatSat-Style_Avionics_Testbed)
+   - `gridfinity-mount` contains the information on how to mount the storage chips to the gridfinity specs [found here](https://github.com/PerthAerospaceStudentTeam/Modular_FlatSat-Style_Avionics_Testbed)
