@@ -52,5 +52,6 @@ Data should be able to read after test 1. and 2. have occurred. Test 3 will be r
 | W25N01GVSFIG               | Y      |        |        |        |        |
 | MT29F2G08ABAEAWP-AATX:E TR | Y†     |        |        |        |        |
 | AT25EU0081A-SSUN-T         | Y      | Y††    |        |        |        |
+
 † Bridging between contacts of the chip observed, however the contacts are no connects
 †† Tested using a D1 mini
