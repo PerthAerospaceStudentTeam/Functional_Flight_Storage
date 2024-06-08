@@ -99,7 +99,7 @@ def randReadC(columnAddress, length): # Read from column address
         print("Address has to be 12 bits, currently:" + str(len(columnAddress) - 4))
         return
     
-    writeCommand("00000100") #05h
+    writeCommand("00000101") #05h
     writeAddress(columnAddress[8:16])
     writeAddress(columnAddress[0:8])
     writeCommand("11100000") #E0h
@@ -128,7 +128,7 @@ def randReadP(columnAddress, pageAddress, blockAddress, length): # LSB of block 
     
     pageBlockAddress = "0000000" + blockAddress + pageAddress
     
-    writeCommand("00000100") #05h
+    writeCommand("00000101") #05h
     writeAddress(columnAddress[8:16])
     writeAddress(columnAddress[0:8])
     writeAddress(pageBlockAddress[16:24])
