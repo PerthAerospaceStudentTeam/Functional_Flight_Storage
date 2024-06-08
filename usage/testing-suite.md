@@ -1,13 +1,13 @@
 ## SPI Memory
 
-SPI testing will be done using the [`SPI Memory`](https://github.com/Marzogh/SPIMemory) package
-The test that will be conducted is quite simple.
+SPI testing will be done using the [`SPI Memory`](https://github.com/Marzogh/SPIMemory) package.
+The tests that will be conducted is quite simple.
 
 # Test Suite
 
 #### Test Zero - Connection Evaluation
 
-This test is quite simple - using a multimeter, we will evaluate all physical are connected
+This test is quite simple - using a multimeter, we will evaluate all physical connections are connected
 
 #### Test One - Basic Test
 
@@ -45,3 +45,14 @@ The chip will then be placed in three environments
 3. 5mA input current.
 
 Data should be able to read after test 1. and 2. have occurred. Test 3 will be run with the current increasing until data is able to be read
+
+# Test Results
+| Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
+|----------------------------|--------|--------|--------|--------|--------|
+| W25N01GVSFIG               | Y      |        |        |        |        |
+| MT29F2G08ABAEAWP-AATX:E TR | Y†     |        |        |        |        |
+| AT25EU0081A-SSUN-T         | Y      | Y††    |        |        |        |
+
+† Bridging between contacts of the chip observed, however the contacts are no connects
+
+†† Tested using a D1 mini
