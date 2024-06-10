@@ -19,7 +19,7 @@ We can use the example code on the SPI Memory page [here](https://github.com/Mar
 
 #### Test Two - Running Test
 
-We will write 100 Kilobytes of data. This is to test overall performance of the chip. The sample data can be found in `data.txt`
+We will write 40 Kilobytes of data. This is to test overall performance of the chip. The sample data can be found in `data.txt`
 
 The following equipment will be used
 
@@ -28,11 +28,7 @@ The following equipment will be used
 
 The test will be functionally identical to Test One. Timing code will be injected to measure how long the write transfer, and then the subsequent read transfer will take
 
-#### Test Three - Overflow Test
-
-The aim of this test is to evaluate whether we can 'break' the board through testing its limits. To do this, we will try and write the full copy of Kerbal Space Program to the storage chip. This takes up 400Mb of data - greatly exceeding the storage capacity of any chip. In theory, the chip should reject this. Let's see what happens
-
-#### Test Four - Stress Test
+#### Test Three - Stress Test
 
 Continuing from Test Two, this test will explore how well the chip can store data with no power and in extreme states
 
