@@ -1,0 +1,2 @@
+void mainlist();
+void testlist();
