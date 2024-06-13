@@ -31,7 +31,8 @@ uint16_t readStringToSerial(SPIFlash flash, uint32_t addr)
     unsigned long t1 = millis();
 
     String output_str;
-    if (!flash.readStr(addr, output_str))
+    flash.readStr(addr, output_str);
+    if (!output_str)
     {
         Serial.println("Data error");
         Serial.println(flash.error(true));
