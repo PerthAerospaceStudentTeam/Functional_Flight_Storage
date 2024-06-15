@@ -56,10 +56,22 @@ Data should be able to read after test 1. and 2. have occurred. Test 3 will be r
 | Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
 |----------------------------|--------|--------|--------|--------|--------|
 | W25N01GVSFIG               | Y      |        |        |        |        |
-| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y†††   | Y†††   |        |        |
+| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y†††   | Y†††   | Y†††   |        |
 | AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        |        |
 
 † Bridging between contacts of the chip observed, however the contacts are no connects
 
 †† Tested using a D1 mini
 ††† Tested using a Raspberry Pi Pico
+
+
+#### MT29F2G08ABAEAWP-AATX:E TR
+With the raspberry pi pico using PIO, reading 16800 bytes took 84 seconds, this gives a speed of 200 bytes per second
+Without PIO, reading 16800 bytes took ~110 seconds, giving a speed of 153 bytes per second
+Writing 40kb took 118.622 seconds, giving a time of ~333bytes per second
+
+This can definitely be improved by using an STM32, or using PIO for read and write on the raspberry pi pico as the chip's max speed is about 84,480,000 bytes per second for read, and 10,560,000 bytes per second for write
+
+For Test 3, the chip has not been tested with a:
+- Multimeter to measure the amperage and voltage
+- Oscilloscope to ensure signals are good

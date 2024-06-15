@@ -1,7 +1,7 @@
 # Flash Storage For FFS - PAST
 # Written by Raphael Ho
 
-from ONFIDriver import *
+from ONFIDriver_2 import *
 import time
 
 time.sleep(0.0001) #100us max start time
