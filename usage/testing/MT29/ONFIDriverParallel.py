@@ -44,14 +44,15 @@ def verifyAddress(columnAddress, pageAddress, blockAddress):
     return True
 
 #-----------------------------------------RAW OPERATIONS-----------------------------------------------------------------------
+import rp2
 from rp2 import PIO, StateMachine, asm_pio
 
-@asm_pio(sideset_init=PIO.OUT_HIGH, set_init=(rp2.PIO.IN_LOW,) * 8, autopush=True, pull_thresh=8)
+@asm_pio(sideset_init=PIO.OUT_HIGH, set_init=(rp2.PIO.IN_LOW,) * 8)
 def paral_read():
     nop()         .side(0)
     in_(pins, 8)
-    nop()         .side(1)
-    push()
+    push()        .side(1)
+
 read_sm = StateMachine(1, paral_read, freq=100000, sideset_base=RE, in_base=Pin(6))
 
 def setPins():
@@ -84,6 +85,15 @@ def readPins():
     #RE.high()
     return data
 
+# @asm_pio(sideset_init=PIO.OUT_HIGH, out_init=(rp2.PIO.OUT_LOW,) * 8, out_shiftdir=PIO.SHIFT_RIGHT)
+# def paral_write():
+#     set(pindirs, 0)
+#     pull() # Pull data from the pins, will stall and wait for the main program to give data
+#     set(pindirs, 1) .side(0)
+#     out(pins, 8) # Tells where to send it, and outputs 8 bits
+#     nop()           .side(1)
+# write_sm = StateMachine(0, paral_write, freq=100000, sideset_base=WE, in_base=Pin(6))
+
 def writePins(data):
     WE.low()
     Pin(13, Pin.OUT).value(int(data[0]))
@@ -95,6 +105,9 @@ def writePins(data):
     Pin(7, Pin.OUT).value(int(data[6]))
     Pin(6, Pin.OUT).value(int(data[7]))
     WE.high()
+#     write_sm.active(1)
+#     write_sm.put(int(data, 2))
+#     write_sm.active(0)
     
 def writeCommand(data):
     CLE.high()
@@ -117,12 +130,12 @@ def readID():
     writeCommand("10010000") #90h
     writeAddress("00000000") #00h
     
+    setPins()
     # Wait 60ns, however the print statement is long enough (i think), WHR
     
     # Read from id data
     print("-----------------------------------------")
     print("ID: ")
-    setPins()
     for i in range(5):
         print(hex(readPins())[2:], end=' ')
     print()
@@ -131,13 +144,12 @@ def readID():
     writeCommand("10010000") #90h
     writeAddress("00100000") #20h
     
+    setPins()
     # Wait 60ns (tWHR)
     time.sleep_us(int(0.06))
     # Read from id data
     print("ONFI ID: ")
-    setPins()
-    readPins() # Pre-set the pins to read
-    for i in range(4):
+    for i in range(6):
         try:
             print(bytearray.fromhex(hex(readPins())[2:]).decode("hex"), end='')
         except:
@@ -149,11 +161,11 @@ def readParameterPage(length):
     writeCommand("11101100") #ECh
     writeAddress("00000000") #00h
     
+    setPins()
     # Wait 25.12us
     time.sleep_us(int(25.12))
     
-    setPins()
-    readPins() # Pre-set the pins to read
+    #readPins() # Pre-set the pins to read
     for i in range(length):
         print(hex(readPins())[2:], end=' ')
     print()
@@ -174,10 +186,11 @@ def setFeatures(featureAddress, value): #01h, 80h, 81h, 90h are the valid featur
 def getFeatures(featureAddress): #01h, 80h, 81h, 90h are the valid features
     writeCommand("11101110") #EEh
     writeAddress(featureAddress)
+    
+    setPins()
     # Wait minimum 20ns + 1us + 100ns (tRR + tFEAT + tWB) = 1.12us or use status to monitor - must write 00h after to enable data output, or use R/B# rising edge + tRR
     time.sleep_us(int(1.12))
     print("-----------------------------------------")
-    setPins()
     print(hex(readPins())[2:])
     for i in range(3):
         readPins() # Reserved output, useless so we discard
@@ -186,8 +199,9 @@ def status():
     writeCommand("01110000") #70h
     # Wait 60 ns
     setPins()
-    data = bin(readPins())[2:]
+    data = hex_to_byte(readPins())
     print("-----------------------------------------")
+    print(data)
     print("Status: ")
     print("	Write protected" if data[0] == "0" else "	Not write protected")
     print("	Busy" if data[1] == "0" else "	Ready")
@@ -206,9 +220,9 @@ def columnRandReadC(columnAddress, length): # Read from column address
     writeAddress(columnAddress[0:8])
     writeCommand("11100000") #E0h
     
+    setPins()
     # Wait 60ns, however the print statement is long enough (i think), WHR
     data = ""
-    setPins()
     for i in range(length):
         d = hex(readPins())[2:]
         if (len(d) == 1):
@@ -232,9 +246,9 @@ def columnRandReadP(columnAddress, pageAddress, blockAddress, length): # LSB of 
     writeAddress(pageBlockAddress[0:8])
     writeCommand("11100000") #E0h
     
+    setPins()
     # Wait 60ns, however the print statement is long enough (i think), WHR
     data = ""
-    setPins()
     for i in range(length):
         d = hex(readPins())[2:]
         if (len(d) == 1):
@@ -282,6 +296,7 @@ def readPage(columnAddress, pageAddress, blockAddress, length, ecc=False):
     writeAddress(pageBlockAddress[0:8])
     writeCommand("00110000") #30h
     
+    setPins()
     # Wait 100ns (tWB)
     time.sleep_us(int(0.1))
     if (ecc): # Wait 70us (tR_ECC) with ecc
@@ -293,7 +308,6 @@ def readPage(columnAddress, pageAddress, blockAddress, length, ecc=False):
         
     time.sleep_us(int(0.02)) # Wait 20ns (tRR)
     data = ""
-    setPins()
     for i in range(length):
         d = hex(readPins())[2:]
         if (len(d) == 1):
@@ -321,12 +335,13 @@ def readPageCacheSequentialContinued(length, pages, ecc=False, end=False):
         pages -= 1
     for i in range(pages):
         writeCommand("00110001") #31h
+        
+        setPins()
         # Wait 100ns (tWB)
         # Wait max 25us (tRCBSY)
         # Wait 20ns (tRR)
         time.sleep_us(int(25.12))
         print(str(i) + "/" + str(pages))
-        setPins()
         for j in range(length):
             d = hex(readPins())[2:]
             if (len(d) == 1):
@@ -339,12 +354,12 @@ def readPageCacheSequentialContinued(length, pages, ecc=False, end=False):
 
 def readPageCacheLast(length):
     writeCommand("00111111") #3Fh
+    setPins()
     data = ""
     # Wait 100ns (tWB)
     # Wait max 25us (tRCBSY)
     # Wait 20ns (tRR)
     time.sleep_us(int(25.12))
-    setPins()
     for j in range(length):
         d = hex(readPins())[2:]
         if (len(d) == 1):
@@ -419,13 +434,3 @@ def initialise():
     time.sleep_ms(1) # 1ms max wait time for first reset
     
     print("Initialised")
-
-initialise()
-readID()
-print(readPage("000000000000", "000000", "00010000010", 20))
-f = open("dump.txt", "w")
-t1 = time.time()
-f.write(readPageCacheSequential("000000000000", "000000", "00010000010", 1056, 16))
-t2 = time.time()
-f.close()
-print(str(t2 - t1))
