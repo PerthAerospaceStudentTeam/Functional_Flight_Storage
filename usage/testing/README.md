@@ -124,3 +124,10 @@ The drivers all have the same functions, currently:
 - Erase operations
     - eraseBlock(pageAddress, blockAddress) will erase the block specified by the blockAddress, pageAddress will be ignored by the NAND chip
 - initialise() will enable the chip, resetting it, and set all control values to default ones
+
+initialise() should be called at the start only
+
+A typical read would use readPage(), if large amounts of data is utilised, readPageSequentional should used
+A typical write would use either programPage() or programPageString() depending on data type, make sure to eraseBlock() before writing data over an area with already written data
+
+Use FlashStorage.py for demonstration of the main features
