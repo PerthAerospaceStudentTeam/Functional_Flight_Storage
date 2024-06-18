@@ -16,12 +16,12 @@ WP = Pin(19, Pin.OUT) # Active low
 
 #-----------------------------------------HELPER FUNCTIONS-----------------------------------------------------------------------
 
-def hex_to_byte(value):
+def toByte(value):
     value = bin(value)[2:]
     return "0" * (8 - len(value)) + value
 
-def string_to_byte(string):
-    return "".join([hex_to_byte(ord(x)) for x in string])
+def stringToByte(string):
+    return "".join([toByte(ord(x)) for x in string])
 
 def verifyColumnAddress(columnAddress):
     if (int(columnAddress, 2) > 2111): # Max address
@@ -39,7 +39,7 @@ def verifyAddress(columnAddress, pageAddress, blockAddress):
         print("Page address has to be 6 bits, currently: " + str(len(pageAddress)))
         return False
     if (len(blockAddress) != 11):
-        print("Page address has to be 11 bits, currently: " + str(len(blockAddress)))
+        print("Block address has to be 11 bits, currently: " + str(len(blockAddress)))
         return False
     return True
 
@@ -53,7 +53,7 @@ def paral_read():
     in_(pins, 8)
     push()        .side(1)
 
-read_sm = StateMachine(1, paral_read, freq=100000, sideset_base=RE, in_base=Pin(6))
+read_sm = StateMachine(1, paral_read, freq=90000, sideset_base=RE, in_base=Pin(6))
 
 def setPins():
     Pin(13, Pin.IN, Pin.PULL_DOWN)
@@ -199,7 +199,7 @@ def status():
     writeCommand("01110000") #70h
     # Wait 60 ns
     setPins()
-    data = hex_to_byte(readPins())
+    data = toByte(readPins())
     print("-----------------------------------------")
     print(data)
     print("Status: ")
@@ -391,6 +391,32 @@ def programPage(columnAddress, pageAddress, blockAddress, data):
     if (extraBits > 0):
         padding = (8 - extraBits) * "0"
         writePins(data[(length-1)*8:] + padding)
+    
+    writeCommand("00010000") #10h
+
+    # Wait 100ns + max 600us (tWB + tPROG & tPROG_ECC)
+    time.sleep_us(int(600.1))
+    # Must check status after each write
+    status()
+
+def programPageString(columnAddress, pageAddress, blockAddress, data):
+    columnAddress = "0000" + columnAddress
+    if (not verifyAddress(columnAddress, pageAddress, blockAddress)):
+        return
+    
+    pageBlockAddress = "0000000" + blockAddress + pageAddress
+    
+    writeCommand("10000000") #80h
+    writeAddress(columnAddress[8:16])
+    writeAddress(columnAddress[0:8])
+    writeAddress(pageBlockAddress[16:24])
+    writeAddress(pageBlockAddress[8:16])
+    writeAddress(pageBlockAddress[0:8])
+    
+    # Wait 70ns minimum, ADL
+    time.sleep_us(int(0.07))
+    for i in range(len(data)):
+        writePins(stringToByte(data[i]))
     
     writeCommand("00010000") #10h
 
