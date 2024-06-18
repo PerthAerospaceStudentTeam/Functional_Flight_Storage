@@ -44,4 +44,5 @@ The pinouts for the parallel interface are as follows
 
 # Software
 
-TBD
+## File Structure
+- It is recommended to use the [`littlefs`](https://github.com/littlefs-project/littlefs) library to create a usable file structure for the device. 
