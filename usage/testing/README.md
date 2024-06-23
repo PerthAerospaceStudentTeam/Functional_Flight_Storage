@@ -9,6 +9,10 @@ The code has been written for an Arduino-based D1 Mini, as that is the only 3v3 
 
 The MT29F2G08ABAEAWP chip does not have any off the self drivers that we can use. Because of this, a custom driver has been written in Python in order to evaluate the performance of the chip. Whilst Python is not the fastest language, it will suffice to test a) whether this chip works and b) how well it works
 
+## FMC NAND Driver
+
+It was found that on the STM32, the FMC NAND Driver can be used for the MT29F2G08ABAEAWP chip
+
 # Test Suite
 
 #### Test Zero - Connection Evaluation
@@ -56,17 +60,22 @@ Data should be able to read after test 1. and 2. have occurred. Test 3 will be r
 | Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
 |----------------------------|--------|--------|--------|--------|--------|
 | W25N01GVSFIG               | Y      |        |        |        |        |
-| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y†††   | Y†††   | Y†††   |        |
+| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y††††  | Y††††  | Y†††   |        |
 | AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        |        |
 
 † Bridging between contacts of the chip observed, however the contacts are no connects
 
 †† Tested using a D1 mini
 ††† Tested using a Raspberry Pi Pico
+†††† Tested using a Raspberry Pi Pico and STM32 (Using FMC)
 
 
 #### MT29F2G08ABAEAWP-AATX:E TR
+### FMC NAND Driver
+##### Reading
+With the STM32 at default (unchanged max wait times) settings, reading 135168 bytes took 1.737 seconds, giving a speed of ~77817 bytes per second (~76 kbytes per second)
 
+#### Python ONFI Driver
 ##### Reading
 With the raspberry pi pico using PIO, reading 16800 bytes took 84 seconds, this gives a speed of 200 bytes per second
 With a second test, with the raspberry pi pico using PIO, reading 84480 bytes took 404.91 seconds, giving a speed of ~208 bytes per second
