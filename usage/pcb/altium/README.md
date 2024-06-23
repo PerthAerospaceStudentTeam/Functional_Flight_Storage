@@ -6,3 +6,7 @@
 | W25N01GVSFIG               | NAND | SPI       | 25mA    | 1Gbit |                |
 | MT29F2G08ABAEAWP-AATX:E TR | NAND | Parallel  | 25mA    | 2Gbit | Automotive     |
 | AT25EU0081A-SSUN-T         | NOR  | SPI       | 1.1mA   | 8Mbit | Relatively new |
+
+# Known issues
+## MT29F2G08ABAEAWP-AATX:E TR
+PCB - D1 is not physically routed to the resistor, so it is disconnected
