@@ -90,6 +90,36 @@ Therefore to be safe we will give setup time 2 HCLK, wait time 8 HCLK, hold time
 
 If we wanted to push the chip, we could try 1-7-1-7
 
+##### Code snippet
+```cpp
+HAL_NAND_Reset(&hnand1);
+NAND_IDTypeDef id;
+HAL_NAND_Read_ID(&hnand1, &id);
+
+HAL_NAND_ECC_Enable(&hnand1);
+HAL_NAND_Read_Status(&hnand1);
+uint8_t data[64*2112*2];
+
+NAND_AddressTypeDef pAddress;
+pAddress.Plane = 0;
+pAddress.Block = 1;
+pAddress.Page = 0;
+uint32_t tick = HAL_GetTick();
+HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &data, 128);
+tick = HAL_GetTick() - tick;
+
+pAddress.Plane = 0;
+pAddress.Block = 2;
+pAddress.Page = 0;
+//uint32_t tick2 = HAL_GetTick();
+//HAL_NAND_Erase_Block(&hnand1, &pAddress);
+//tick2 = HAL_GetTick() - tick2;
+
+uint32_t tick3 = HAL_GetTick();
+HAL_NAND_Write_Page_8b(&hnand1, &pAddress, &data, 128);
+tick3 = HAL_GetTick() - tick3;
+```
+
 ##### Reading (ECC Enabled)
 With the STM32 at default (unchanged max wait times) settings, reading 135168 bytes took 1.737 seconds, giving a speed of ~77817 bytes per second (~76 kbytes per second)
 With some tweaking of time settings (setting times to 64 HCLK), reading 135168 bytes took 0.517 seconds, giving a speed of ~255kb/s
