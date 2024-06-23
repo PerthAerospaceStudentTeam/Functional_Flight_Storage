@@ -44,7 +44,7 @@ The test will be functionally identical to Test One. Timing code will be injecte
 
 #### Test Four - Stress Test
 
-Continuing from Test Two, this test will explore how well the chip can store data with no power and in extreme states
+Continuing from Test Three, this test will explore how well the chip can store data with no power and in extreme states
 
 The test begins by writing the `data.txt` to the the chip. The chip will then be placed in two environments (with its power off)
 
@@ -60,15 +60,16 @@ Data should be able to read after test 1. and 2. have occurred. Test 3 will be r
 | Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
 |----------------------------|--------|--------|--------|--------|--------|
 | W25N01GVSFIG               | Y      |        |        |        |        |
-| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y††††  | Y††††  | Y†††   |        |
+| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y††††  | Y††††  | Y††††  |        |
 | AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        |        |
 
 † Bridging between contacts of the chip observed, however the contacts are no connects
 
 †† Tested using a D1 mini
-††† Tested using a Raspberry Pi Pico
-†††† Tested using a Raspberry Pi Pico and STM32 (Using FMC)
 
+††† Tested using a Raspberry Pi Pico
+
+†††† Tested using a Raspberry Pi Pico and STM32 (Using FMC)
 
 #### MT29F2G08ABAEAWP-AATX:E TR
 ### FMC NAND Driver
