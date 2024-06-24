@@ -73,7 +73,7 @@ Data should be able to read after test 1. and 2. have occurred. Test 3 will be r
 
 #### MT29F2G08ABAEAWP-AATX:E TR
 ### FMC NAND Driver
-##### Config
+#### Config
 Setting all times to 64 HCLK should be safe, as running at 64 MHZ, 1 HCLK would be ~16ns, and 64 HCLK would be ~1us, which should be plenty of time
 
 Setup time - highest min is 10ns min (ALE), with exception of 15ns min (CE#)
@@ -86,8 +86,19 @@ High Z - (RE# high to output high-Z 100ns max)
 Erase operation time 0.7-3ms
 Program page 200-600us (room temp) - Should read status after, as there is no wait within the driver
 
-Therefore to be safe we will give setup time 2 HCLK, wait time 8 HCLK, hold time 2 HCLK, Hi-Z 8 HCLK (2-8-2-8)
+ALE to RE# & CLE to RE# delay 10ns min
 
+#### Timings @ 200 MHZ
+200 MHZ seems to be the fastest FMC can run, this means that one HCLK is 5ns
+The timings would be 3-20-2-20
+If we were to push it, it we could try 2-20-1-20
+
+ALE to RE delay & CLE to RE delay would be set to 2 HCLK
+##### Reading @200 MHZ
+##### Writing @200 MHZ
+
+#### Timings @ 64 MHZ
+To be safe we will give setup time 2 HCLK, wait time 8 HCLK, hold time 2 HCLK, Hi-Z 8 HCLK (2-8-2-8)
 If we wanted to push the chip, we could try 1-7-1-7
 
 ##### Code snippet
@@ -96,16 +107,16 @@ HAL_NAND_Reset(&hnand1);
 NAND_IDTypeDef id;
 HAL_NAND_Read_ID(&hnand1, &id);
 
-HAL_NAND_ECC_Enable(&hnand1);
+//HAL_NAND_ECC_Enable(&hnand1);
 HAL_NAND_Read_Status(&hnand1);
-uint8_t data[64*2112*2];
+uint8_t data[64*2112];
 
 NAND_AddressTypeDef pAddress;
 pAddress.Plane = 0;
 pAddress.Block = 1;
 pAddress.Page = 0;
 uint32_t tick = HAL_GetTick();
-HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &data, 128);
+HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &data, 64);
 tick = HAL_GetTick() - tick;
 
 pAddress.Plane = 0;
@@ -116,11 +127,11 @@ pAddress.Page = 0;
 //tick2 = HAL_GetTick() - tick2;
 
 uint32_t tick3 = HAL_GetTick();
-HAL_NAND_Write_Page_8b(&hnand1, &pAddress, &data, 128);
+HAL_NAND_Write_Page_8b(&hnand1, &pAddress, &data, 64);
 tick3 = HAL_GetTick() - tick3;
 ```
 
-##### Reading (ECC Enabled)
+##### Reading @64 MHZ
 With the STM32 at default (unchanged max wait times) settings, reading 135168 bytes took 1.737 seconds, giving a speed of ~77817 bytes per second (~76 kbytes per second)
 With some tweaking of time settings (setting times to 64 HCLK), reading 135168 bytes took 0.517 seconds, giving a speed of ~255kb/s
 
@@ -132,7 +143,7 @@ Tweaking the time settings to 1-1-1-1, reading 135168 bytes took 0.120 seconds, 
 
 With 2-8-2-8, reading 270336 bytes took 0.275 seconds, giving a speed of ~0.9375mb/s
 
-##### Writing (ECC Enabled)
+##### Writing @64 MHZ
 At 64 HCLK, writing 135168 bytes took 0.418 seconds, giving a speed of ~315kb/s
 
 Tweaking the time settings to 2-8-2-8, writing 135168 bytes took 0.146 seconds, giving a speed of ~904kb/s (~0.883mb/s)
@@ -143,6 +154,10 @@ Tweaking the time settings to 1-2-1-1, writing 135168 bytes took 0.145 seconds, 
 
 
 With 2-8-2-8, writing 270336 bytes took 0.291 seconds, giving a speed of ~0.886mb/s
+
+##### Further improvements
+The driver does not seem to use the ECC builtin on the chip, this could be enabled
+The driver does not use cache sequential read, however it is not supported with ECC, although if software ECC is used, it would possibly be able to improve speeds slightly
 
 #### Python ONFI Driver
 ##### Reading
