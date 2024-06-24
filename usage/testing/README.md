@@ -101,36 +101,6 @@ ALE to RE delay & CLE to RE delay would be set to 2 HCLK
 To be safe we will give setup time 2 HCLK, wait time 8 HCLK, hold time 2 HCLK, Hi-Z 8 HCLK (2-8-2-8)
 If we wanted to push the chip, we could try 1-7-1-7
 
-##### Code snippet
-```cpp
-HAL_NAND_Reset(&hnand1);
-NAND_IDTypeDef id;
-HAL_NAND_Read_ID(&hnand1, &id);
-
-//HAL_NAND_ECC_Enable(&hnand1);
-HAL_NAND_Read_Status(&hnand1);
-uint8_t data[64*2112];
-
-NAND_AddressTypeDef pAddress;
-pAddress.Plane = 0;
-pAddress.Block = 1;
-pAddress.Page = 0;
-uint32_t tick = HAL_GetTick();
-HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &data, 64);
-tick = HAL_GetTick() - tick;
-
-pAddress.Plane = 0;
-pAddress.Block = 2;
-pAddress.Page = 0;
-//uint32_t tick2 = HAL_GetTick();
-//HAL_NAND_Erase_Block(&hnand1, &pAddress);
-//tick2 = HAL_GetTick() - tick2;
-
-uint32_t tick3 = HAL_GetTick();
-HAL_NAND_Write_Page_8b(&hnand1, &pAddress, &data, 64);
-tick3 = HAL_GetTick() - tick3;
-```
-
 ##### Reading @64 MHZ
 With the STM32 at default (unchanged max wait times) settings, reading 135168 bytes took 1.737 seconds, giving a speed of ~77817 bytes per second (~76 kbytes per second)
 With some tweaking of time settings (setting times to 64 HCLK), reading 135168 bytes took 0.517 seconds, giving a speed of ~255kb/s
@@ -175,11 +145,3 @@ This can definitely be improved by using an STM32, or using PIO for read and wri
 For Test 3, the chip has not been tested with a:
 - Multimeter to measure the amperage and voltage
 - Oscilloscope to ensure signals are good
-
-##### Usage of Raspberry Pi Pico driver & Testing
-There are three drivers, any one of them should be able to run, however they have their differences
-- ONFIDriver.py is the default driver, it should run normal with no errors
-- ONFIDriver_2.py is nearly identical to the default driver, however it has removed the fanatics of the wait times, assuming that the program is running slow enough where the wait times will be reached, however in practice, there is no observed large difference with the default driver in terms of speed (more testing required)
-- ONFIDriverParallel.py is similar to the default driver, however PIO is used to read pins, which increases speed dramatically, leading to about 30% increase in speed for reading, PIO is NOT used to write to the pins, due to problems (TODO: Fix PIO write), however due to write not requiring a change of Pin state, it is already quick enough for programming the NAND chip, it would however still improve the overall speed. There is a few observed problems with using the PIO driver, due to using assembly, I do not fully understand how PIO works, and so it may sometimes have previous bytes in the registers and may include those in the next function. When calling status, it may also bit shift the values, causing a problem
-
-Refer to [here](https://github.com/RaphGamingz/BasicONFIDriver/tree/main) for the driver functionality
