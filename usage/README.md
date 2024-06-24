@@ -64,7 +64,6 @@ The pinouts for the parallel interface are as follows for the stm32
 | IO7  | PE_10  | Data I/O                                                                |
 
 # Software
-
 ### MT29 STM32 FMC example code:
 ```cpp
 HAL_NAND_Reset(&hnand1);
@@ -73,12 +72,26 @@ HAL_NAND_Read_ID(&hnand1, &id);
 
 //HAL_NAND_ECC_Enable(&hnand1);
 HAL_NAND_Read_Status(&hnand1);
-uint8_t data[64*2112];
+uint8_t hello[2112];
+uint8_t h[12] = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'};
 
 NAND_AddressTypeDef pAddress;
 pAddress.Plane = 0;
+pAddress.Block = 0;
+pAddress.Page = 0;
+// Test 2
+HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &hello, 1);
+
+HAL_NAND_Write_Page_8b(&hnand1, &pAddress, &h, 1);
+
+HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &hello, 1);
+
+pAddress.Plane = 0;
 pAddress.Block = 1;
 pAddress.Page = 0;
+uint8_t data[64*2112];
+
+// Test 3
 uint32_t tick = HAL_GetTick();
 HAL_NAND_Read_Page_8b(&hnand1, &pAddress, &data, 64);
 tick = HAL_GetTick() - tick;

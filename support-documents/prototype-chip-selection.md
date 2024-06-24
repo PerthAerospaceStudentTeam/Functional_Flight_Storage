@@ -1,6 +1,6 @@
 # Overview
 
-There are many chips that can be used for storage. All are to be automotive grade, preferably aerospace grade This project will focus on the following 3:
+There are many chips that can be used for storage. All are to be automotive grade, preferably aerospace grade. This project will focus on the following 3:
 
 ## NAND Flash
 
@@ -31,7 +31,7 @@ On paper, the most desirable form of memory. It is non-volatile, high capacity, 
 #### Reasons for not using
 
 - Needs a LOT of GPIO pins
-- Expensive
+- Expensive (For NAND)
 
 ## NOR Flash
 

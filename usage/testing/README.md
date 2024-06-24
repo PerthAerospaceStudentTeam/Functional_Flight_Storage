@@ -71,10 +71,20 @@ Data should be able to read after test 1. and 2. have occurred. Test 3 will be r
 
 †††† Tested using a Raspberry Pi Pico and STM32 (Using FMC)
 
-#### MT29F2G08ABAEAWP-AATX:E TR
+## Summary
+| Chip                       | Read Speed                          | Write Speed      | Number of Pins | Min Input Current |
+|----------------------------|-------------------------------------|------------------|----------------|-------------------|
+| W25N01GVSFIG               |                                     |                  | 4+2=6          |                   |
+| MT29F2G08ABAEAWP-AATX:E TR | @200MHz 2.86mb/s typ, 4.02mb/s max  | @200MHz 2.86mb/s | 8+7=15         |                   |
+| AT25EU0081A-SSUN-T         |                                     |                  | 4+2=6          |                   |
+
+## MT29F2G08ABAEAWP-AATX:E TR
+Fastest & safest speed reached was 2.86mb/s read and write
+Fastest read speed reached was 4.02mb/s, however we are unsure if the data was all read correctly
+
 ### FMC NAND Driver
 #### Config
-Setting all times to 64 HCLK should be safe, as running at 64 MHZ, 1 HCLK would be ~16ns, and 64 HCLK would be ~1us, which should be plenty of time
+Setting all times to 64 HCLK should be safe, as running at 64 MHz, 1 HCLK would be ~16ns, and 64 HCLK would be ~1us, which should be plenty of time
 
 Setup time - highest min is 10ns min (ALE), with exception of 15ns min (CE#)
 Hold time - 5ns min
@@ -88,55 +98,76 @@ Program page 200-600us (room temp) - Should read status after, as there is no wa
 
 ALE to RE# & CLE to RE# delay 10ns min
 
-#### Timings @ 200 MHZ
-200 MHZ seems to be the fastest FMC can run, this means that one HCLK is 5ns
+#### Timings @ 200 MHz
+ALE to RE delay & CLE to RE delay would be set to 2 HCLK
+
+200 MHz is not the fastest FMC can run (it can run up to 240 MHz), however it would require non-whole clock cycles to run (probably taking up more time)
+Using 200 MHz means that one HCLK is 5ns
 The timings would be 3-20-2-20
 If we were to push it, it we could try 2-20-1-20
 
-ALE to RE delay & CLE to RE delay would be set to 2 HCLK
-##### Reading @200 MHZ
-##### Writing @200 MHZ
+To really push it, 2-10-1-10 was also tested, however data integrity could be a problem (unverified)
+- Benefits to this was a faster read speed, but approx same write speed
 
-#### Timings @ 64 MHZ
-To be safe we will give setup time 2 HCLK, wait time 8 HCLK, hold time 2 HCLK, Hi-Z 8 HCLK (2-8-2-8)
+##### Reading @200 MHz
+3-20-2-20: Reading 135168 bytes took 0.047 seconds, giving a speed of ~2.74mb/s
+
+2-20-1-20: Reading 135168 bytes took 0.045 seconds, giving a speed of ~2.86mb/s
+
+2-10-1-10: Reading 135168 bytes took 0.032 seconds, giving a speed of ~4.02mb/s
+
+##### Writing @200 MHz
+3-20-2-20: Writing 135168 bytes took 0.045 seconds, giving a speed of ~2.86mb/s
+
+2-20-1-20: Writing 135168 bytes took 0.045 seconds, giving a speed of ~2.86mb/s
+
+2-10-1-10: Writing 135168 bytes took 0.046 seconds, giving a speed of ~2.80mb/s (SLOWER)
+
+#### Timings @ 64 MHz
+ALE to RE delay & CLE to RE delay would be set to 1 HCLK
+
+64 MHz is the default speed
+The timings would be 2-8-2-8
 If we wanted to push the chip, we could try 1-7-1-7
 
-##### Reading @64 MHZ
+To really push it, 1-1-1-1 was also tested, however data integrity could be a problem (unverified)
+##### Reading @64 MHz
 With the STM32 at default (unchanged max wait times) settings, reading 135168 bytes took 1.737 seconds, giving a speed of ~77817 bytes per second (~76 kbytes per second)
-With some tweaking of time settings (setting times to 64 HCLK), reading 135168 bytes took 0.517 seconds, giving a speed of ~255kb/s
+64-64-64-64: Reading 135168 bytes took 0.517 seconds, giving a speed of ~255kb/s
 
-Tweaking the time settings to 2-8-2-8, reading 135168 bytes took 0.137 seconds, giving a speed of ~963.5kb/s (~0.941mb/s)
+2-8-2-8: Reading 135168 bytes took 0.137 seconds, giving a speed of ~0.941mb/s
 
-Tweaking the time settings to 1-7-1-7, reading 135168 bytes took 0.131 seconds, giving a speed of ~0.984mb/s
+1-7-1-7: Reading 135168 bytes took 0.131 seconds, giving a speed of ~0.984mb/s
 
-Tweaking the time settings to 1-1-1-1, reading 135168 bytes took 0.120 seconds, giving a speed of ~1.074mb/s
-
-With 2-8-2-8, reading 270336 bytes took 0.275 seconds, giving a speed of ~0.9375mb/s
-
-##### Writing @64 MHZ
-At 64 HCLK, writing 135168 bytes took 0.418 seconds, giving a speed of ~315kb/s
-
-Tweaking the time settings to 2-8-2-8, writing 135168 bytes took 0.146 seconds, giving a speed of ~904kb/s (~0.883mb/s)
-
-Tweaking the time settings to 1-7-1-7, writing 135168 bytes took 0.145 seconds, giving a speed of ~0.889mb/s
-
-Tweaking the time settings to 1-2-1-1, writing 135168 bytes took 0.145 seconds, giving a speed of ~0.889mb/s
+1-1-1-1: Reading 135168 bytes took 0.120 seconds, giving a speed of ~1.074mb/s
 
 
-With 2-8-2-8, writing 270336 bytes took 0.291 seconds, giving a speed of ~0.886mb/s
+2-8-2-8: Reading 270336 bytes took 0.275 seconds, giving a speed of ~0.9375mb/s
 
-##### Further improvements
+##### Writing @64 MHz
+64-64-64-64: Writing 135168 bytes took 0.418 seconds, giving a speed of ~315kb/s
+
+2-8-2-8: Writing 135168 bytes took 0.146 seconds, giving a speed of ~0.883mb/s
+
+1-7-1-7: Writing 135168 bytes took 0.145 seconds, giving a speed of ~0.889mb/s
+
+1-2-1-1: Writing 135168 bytes took 0.145 seconds, giving a speed of ~0.889mb/s
+
+
+2-8-2-8: Writing 270336 bytes took 0.291 seconds, giving a speed of ~0.886mb/s
+
+#### Further improvements
 The driver does not seem to use the ECC builtin on the chip, this could be enabled
 The driver does not use cache sequential read, however it is not supported with ECC, although if software ECC is used, it would possibly be able to improve speeds slightly
 
-#### Python ONFI Driver
-##### Reading
+### Python ONFI Driver
+#### Reading
 With the raspberry pi pico using PIO, reading 16800 bytes took 84 seconds, this gives a speed of 200 bytes per second
 With a second test, with the raspberry pi pico using PIO, reading 84480 bytes took 404.91 seconds, giving a speed of ~208 bytes per second
 With a third test, with the raspberry pi pico using PIO, reading 84480 bytes took 396.167 seconds, giving a speed of ~213 bytes per second
 Without PIO, reading 16800 bytes took ~110 seconds, giving a speed of 153 bytes per second
 
-##### Writing
+#### Writing
 Writing 40kb took 118.622 seconds, giving a time of ~333 bytes per second
 With a second test, utilising all bytes in a page, writing 30kb took 76.513 seconds, giving a time of ~522 bytes per second (using the programPageString function, as it may utilise less memory)
 
