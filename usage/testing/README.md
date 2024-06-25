@@ -56,6 +56,8 @@ The chip will then be placed in three environments
 
 Data should be able to read after test 1. and 2. have occurred. Test 3 will be run with the current increasing until data is able to be read
 
+A thermal camera will be used to measure the temperature of the chip while running
+
 # Test Results
 | Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
 |----------------------------|--------|--------|--------|--------|--------|
