@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "probe-rs-debug",
+      "request": "launch",
+      "name": "probe_rs Executable launch example",
+      "cwd": "${workspaceFolder}",
+      //!MODIFY (or remove)
+      //!MODIFY (or remove)
+      "runtimeExecutable": "probe-rs",
+      "runtimeArgs": ["dap-server"],
+      //!MODIFY
+      "chip": "STM32H743ZITx",
+      "flashingConfig": {
+        "flashingEnabled": true,
+        "haltAfterReset": false,
+        "formatOptions": {
+          //!MODIFY (or remove). Valid values are: 'bin', 'hex', 'elf'(default), 'idf'
+          "binaryFormat": "elf"
+        }
+      },
+      "coreConfigs": [
+        {
+          "coreIndex": 0,
+          //!MODIFY
+          "programBinary": "/home/sean/embedded/learning/rust/embedded/storage-driver/target/thumbv7em-none-eabihf/debug/storage-driver",
+          //!MODIFY
+          "svdFile": "STM32H743.svd"
+        }
+      ],
+      "env": {
+        //!MODIFY (or remove)
+        // If you set this variable, check the VSCode console log window for the location of the log file.
+        "RUST_LOG": "info"
+      },
+      // Info, Debug
+      "consoleLogLevel": "Console"
+    }
+  ]
+}
