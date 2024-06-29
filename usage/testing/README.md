@@ -83,8 +83,8 @@ A thermal camera will be used to measure the temperature of the chip while runni
 
 ## W25N01GVSFIG
 Peak speeds were averaged over three times with the data from Test 3. 
-Peak write took 0.803635 seconds for 40Kb of data (50kb/s). 
-Peak read took 0.251840 for 40Kb of data (158kb/s).
+- Peak write took 0.803635 seconds for 40Kb of data (50kb/s). 
+- Peak read took 0.251840 for 40Kb of data (158kb/s).
 
 #### Functions supported by the Driver
 - Writing a byte and a data structure
@@ -99,8 +99,8 @@ The driver is certainly not the fastest. There a quite a few improvements that c
 In theory, QSPI would speed up the chip by 4 times, and various optimisations to the code could result in an additional 1.5 times speed boost.
 
 With a better driver, the theoretical performance would be
-Write Speed: 250kb/s
-Read Speed: 790 kb/s
+- Write Speed: 250kb/s
+- Read Speed: 790 kb/s
 
 ## MT29F2G08ABAEAWP-AATX:E TR
 Fastest & safest speed reached was 2.86mb/s read and write
