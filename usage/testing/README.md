@@ -98,6 +98,8 @@ The driver is certainly not the fastest. There a quite a few improvements that c
 - The HAL also waits between 50-100microseconds between each transaction, which adds up considerably (especially if only 32 bytes is sent at a time)
 In theory, QSPI would speed up the chip by 4 times, and various optimisations to the code could result in an additional 1.5 times speed boost.
 
+The Driver also doesn't make full use of the ECC onboard the chip. Whilst we do let the ECC bits get written, and so the chip handles that side of data integrity, we do not poll the status register to see if there is an irrecoverable ECC corruption
+
 With a better driver, the theoretical performance would be
 - Write Speed: 250kb/s
 - Read Speed: 790 kb/s
