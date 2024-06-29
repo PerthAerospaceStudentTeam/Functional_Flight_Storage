@@ -64,6 +64,33 @@ The pinouts for the parallel interface are as follows for the stm32
 | IO7  | PE_10  | Data I/O                                                                |
 
 # Software
+### W25 STM32 Example code:
+_Note: Whilst it is written in Rust, the command set is the same in CPP. If you want this driver to be compiled for CPP please message me on discord :)_
+```rust
+    let mut w25 = W25::init(qspi);
+    // Test 1 - Grab the ID of the chip
+    let id = w25.get_id().unwrap();
+    rprintln!("Got id: {:x?}", id);
+    w25.reset();
+    // Test 2 - we need to erase our blocks first
+    //Erase block erases a given block
+    w25.erase_block(0).unwrap();
+    let text = "Hello World!".as_bytes();
+    // write_data takes a given set of data, and writes it to an address. It will add a 0xfe byte at the end to signify where the data ends
+    w25.write_data(0, text).unwrap();
+    let mut dest = [0xff; 11];
+    // read_known will read out the data if you already know the size - the buffer to write to must be less than or equal to the data you are expecting
+    w25.read_known(0, &mut dest).unwrap();
+    // Test 3 - again, we erase our block first
+    w25.erase_block(0).unwrap();
+    w25.write_data(0, DATA.as_bytes()).unwrap();
+    let mut dest = [0xff; 40122];
+    w25.read_known(0, &mut dest).unwrap();
+
+    // read_data will read until there is a 0xfe byte, then it will break
+    // the data buffer must be equal to or greater than the size you are expecting
+    w25.read_data(0, &mut dest).unwrap();
+```
 ### MT29 STM32 FMC example code:
 ```cpp
 HAL_NAND_Reset(&hnand1);
