@@ -13,6 +13,9 @@ The MT29F2G08ABAEAWP chip does not have any off the self drivers that we can use
 
 It was found that on the STM32, the FMC NAND Driver can be used for the MT29F2G08ABAEAWP chip
 
+## Custom Driver for the W25N01GVSFIG
+Whilst the [`SPI Memory`](https://github.com/Marzogh/SPIMemory) did have good support for the chips, it did not support many of the commands for the W25N01GVSFIG. A custom driver was written in Rust (mainly because I wasn't really thinking and wanted to try something new)
+
 # Test Suite
 
 #### Test Zero - Connection Evaluation
@@ -61,24 +64,27 @@ A thermal camera will be used to measure the temperature of the chip while runni
 # Test Results
 | Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
 |----------------------------|--------|--------|--------|--------|--------|
-| W25N01GVSFIG               | Y      |        |        |        |        |
-| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y††††  | Y††††  | Y††††  |        |
+| W25N01GVSFIG               | Y      | Y†††  | Y†††    | Y†††   |        |
+| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y†††  | Y†††    | Y†††   |        |
 | AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        |        |
 
 † Bridging between contacts of the chip observed, however the contacts are no connects
 
 †† Tested using a D1 mini
 
-††† Tested using a Raspberry Pi Pico
-
-†††† Tested using a Raspberry Pi Pico and STM32 (Using FMC)
+††† Tested using a STM32 (Using FMC/Custom Drivers)
 
 ## Summary
 | Chip                       | Read Speed                          | Write Speed      | Number of Pins | Min Input Current |
 |----------------------------|-------------------------------------|------------------|----------------|-------------------|
-| W25N01GVSFIG               |                                     |                  | 4+2=6          |                   |
+| W25N01GVSFIG               | @240MHz, 158kb/s                    | @240MHz, 50kb/s  | 4+2=6          |                   |
 | MT29F2G08ABAEAWP-AATX:E TR | @200MHz 2.86mb/s typ, 4.02mb/s max  | @200MHz 2.86mb/s | 8+7=15         |                   |
 | AT25EU0081A-SSUN-T         |                                     |                  | 4+2=6          |                   |
+
+## W25N01GVSFIG
+Peak speeds were averaged over three times with the data from Test 3. 
+Peak write took 0.803635 seconds for 40Kb of data (50kb/s). 
+Peak read took 0.251840 for 40Kb of data (158kb/s).
 
 ## MT29F2G08ABAEAWP-AATX:E TR
 Fastest & safest speed reached was 2.86mb/s read and write
