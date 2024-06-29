@@ -86,6 +86,22 @@ Peak speeds were averaged over three times with the data from Test 3.
 Peak write took 0.803635 seconds for 40Kb of data (50kb/s). 
 Peak read took 0.251840 for 40Kb of data (158kb/s).
 
+#### Functions supported by the Driver
+- Writing a byte and a data structure
+- Reading back a byte or a page
+- Reading back a data structure of known (slow) or unknown length (slower)
+
+#### Improvements to the Driver
+The driver is certainly not the fastest. There a quite a few improvements that could be made to the code. In no particular order
+- The driver started out using the QSPI interface. However, the HAL I am using does not support changing between SPI and QSPI between different transaction phases. This means the instruction was being sent across 4 channels, whereas the chip expected it on the MOSI channel only. This was discovered too late in the development, and so QSPI is still being used, but in the SingleLine mode
+- The QSPI interface only supports 32 byte transfers at a time, meaning it has to be buffered out which is very slowly
+- The HAL also waits between 50-100microseconds between each transaction, which adds up considerably (especially if only 32 bytes is sent at a time)
+In theory, QSPI would speed up the chip by 4 times, and various optimisations to the code could result in an additional 1.5 times speed boost.
+
+With a better driver, the theoretical performance would be
+Write Speed: 250kb/s
+Read Speed: 790 kb/s
+
 ## MT29F2G08ABAEAWP-AATX:E TR
 Fastest & safest speed reached was 2.86mb/s read and write
 Fastest read speed reached was 4.02mb/s, however we are unsure if the data was all read correctly
