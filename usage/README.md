@@ -65,7 +65,7 @@ The pinouts for the parallel interface are as follows for the stm32
 
 # Software
 ### W25 STM32 Example code:
-_Note: Whilst it is written in Rust, the command set is the same in CPP. If you want this driver to be compiled for CPP please message me on discord :)_
+_Note: Whilst it is written in Rust, the command set is the same in CPP. If you want this driver to be compiled for CPP please message Sean on discord_
 ```rust
     let mut w25 = W25::init(qspi);
     // Test 1 - Grab the ID of the chip
@@ -92,6 +92,7 @@ _Note: Whilst it is written in Rust, the command set is the same in CPP. If you 
     w25.read_data(0, &mut dest).unwrap();
 ```
 ### MT29 STM32 FMC example code:
+_Note: Message Raph on discord for any questions_
 ```cpp
 HAL_NAND_Reset(&hnand1);
 NAND_IDTypeDef id;
