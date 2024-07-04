@@ -47,32 +47,23 @@ The test will be functionally identical to Test One. Timing code will be injecte
 
 #### Test Four - Stress Test
 
-Continuing from Test Three, this test will explore how well the chip can store data with no power and in extreme states
-
-The test begins by writing the `data.txt` to the the chip. The chip will then be placed in two environments (with its power off)
-
-The chip will then be placed in three environments
-
-1. 60 degrees celsius for 30 minutes
-2. -10 degrees celsius for 30 minutes
-3. 5mA input current.
-
-Data should be able to read after test 1. and 2. have occurred. Test 3 will be run with the current increasing until data is able to be read
-
+The test begins by writing the `data.txt` to the the chip
 A thermal camera will be used to measure the temperature of the chip while running
+Current will be measured to find the power draw of the chip
 
 # Test Results
 | Chip                       | Test 0 | Test 1 | Test 2 | Test 3 | Test 4 |
 |----------------------------|--------|--------|--------|--------|--------|
-| W25N01GVSFIG               | Y      | Y†††  | Y†††    | Y†††   |        |
-| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y†††  | Y†††    | Y†††   |        |
-| AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        |        |
+| W25N01GVSFIG               | Y      | Y      | Y      | Y      | Y†††   |
+| MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y      | Y      | Y      | Y†††   |
+| AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        | Y†††   |
 
 † Bridging between contacts of the chip observed, however the contacts are no connects
 
 †† Tested using a D1 mini
 
-††† Tested using a STM32 (Using FMC/Custom Drivers)
+††† Temperature difference was negligible & power draw could not be measured
+
 
 ## Summary
 | Chip                       | Read Speed                          | Write Speed      | Number of Pins | Min Input Current |
