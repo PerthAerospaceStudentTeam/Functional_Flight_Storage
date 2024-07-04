@@ -1,9 +1,11 @@
-## cpp-testing-regime
+## cpp-testing-regime - WAS NOT USED
 
 All chips that use SPI will be done using the [`SPI Memory`](https://github.com/Marzogh/SPIMemory) package. This package does have a built in diagnostics routine, to test performance of all commands. This can be run through the testing regime program
 For ease of use, a complete testing regime has been written in order to make testing a lot easier. It can be found in `cpp-testing-regime`. 
 Note that it has been built with [PlatformIO](https://platformio.org/), and should be opened with it in order to make best use of the tooling
 The code has been written for an Arduino-based D1 Mini, as that is the only 3v3 logic board I had lying around to test with. Using a differnt board should be as simple as changing the board defined in `platform.ini`, provided it is supported by the [SPIMemory](https://github.com/Marzogh/SPIMemory) library
+
+After some tests, it was found that the W25N01GVSFIG did not work very well with the [`SPI Memory`](https://github.com/Marzogh/SPIMemory) package, and so custom drivers and testing routines were developed
 
 ## ONFIDriver
 

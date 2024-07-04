@@ -1,0 +1,2 @@
+# DO NOT USE
+This was a testing suite to run on a 3v3 based Arduino board to test the two SPI chips. However, both these chips ended having custom drivers written for them, and the testing was done with an STM32. Because of this, this code was not used. We are leaving it here as reference for the development process
