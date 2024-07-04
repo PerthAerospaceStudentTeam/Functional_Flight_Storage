@@ -56,7 +56,7 @@ Current will be measured to find the power draw of the chip
 |----------------------------|--------|--------|--------|--------|--------|
 | W25N01GVSFIG               | Y      | Y      | Y      | Y      | Y†††   |
 | MT29F2G08ABAEAWP-AATX:E TR | Y†     | Y      | Y      | Y      | Y†††   |
-| AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        | Y†††   |
+| AT25EU0081A-SSUN-T         | Y      | Y††    | Y††    |        |        |
 
 † Bridging between contacts of the chip observed, however the contacts are no connects
 
