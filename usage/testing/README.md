@@ -66,11 +66,11 @@ Current will be measured to find the power draw of the chip
 
 
 ## Summary
-| Chip                       | Read Speed                          | Write Speed      | Number of Pins | Min Input Current |
-|----------------------------|-------------------------------------|------------------|----------------|-------------------|
-| W25N01GVSFIG               | @240MHz, 158kb/s                    | @240MHz, 50kb/s  | 4+2=6          |                   |
-| MT29F2G08ABAEAWP-AATX:E TR | @200MHz 2.86mb/s typ, 4.02mb/s max  | @200MHz 2.86mb/s | 8+7=15         |                   |
-| AT25EU0081A-SSUN-T         |                                     |                  | 4+2=6          |                   |
+| Chip                       | Read Speed                          | Write Speed      | Number of Pins |
+|----------------------------|-------------------------------------|------------------|----------------|
+| W25N01GVSFIG               | @240MHz, 158kb/s                    | @240MHz, 50kb/s  | 4+2=6          |
+| MT29F2G08ABAEAWP-AATX:E TR | @200MHz 2.86mb/s typ, 4.02mb/s max  | @200MHz 2.86mb/s | 8+7=15         |
+| AT25EU0081A-SSUN-T         | 133kb/s                             | 8.5kb/s          | 4+2=6          |
 
 ## W25N01GVSFIG
 Peak speeds were averaged over three times with the data from Test 3. 
