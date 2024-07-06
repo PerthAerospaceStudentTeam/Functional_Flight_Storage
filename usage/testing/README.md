@@ -1,4 +1,4 @@
-## cpp-testing-regime - WAS NOT USED
+## Testing Regime
 
 All chips that use SPI will be done using the [`SPI Memory`](https://github.com/Marzogh/SPIMemory) package. This package does have a built in diagnostics routine, to test performance of all commands. This can be run through the testing regime program
 For ease of use, a complete testing regime has been written in order to make testing a lot easier. It can be found in `cpp-testing-regime`. 
